@@ -11,6 +11,10 @@ const connection = mysql.createConnection({
     database: 'heroku_a69b82598923256'
 });
 
+app.get('/', function(req, res) {
+    res.send('Hello world')
+})
+
 app.get('/spots', function(req, res) {
     connection.query('SELECT * FROM Spot', (error, rows) => {
         if (error) throw error;
