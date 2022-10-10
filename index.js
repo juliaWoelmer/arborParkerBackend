@@ -5,10 +5,10 @@ const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 
 const connection = mysql.createConnection({
-    host: 'us-cdbr-east-06.cleardb.net',
-    user: 'b6f903096096fe',
-    password: '7a0c4b01',
-    database: 'heroku_a69b82598923256'
+    host: process.env.DATABASE_HOST,
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE_NAME
 });
 
 app.get('/', function(req, res) {
