@@ -5,3 +5,6 @@ heroku ps:restart
 
 To push run 
 git push heroku main
+
+To run locally
+heroku local web -p 3000

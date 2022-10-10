@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
 
 const port = process.env.PORT || 3000;
 
@@ -24,6 +26,16 @@ app.get('/spots', function(req, res) {
             return {id: spot.SpotId, isOpen: !!spot.Open}
         });
         res.json(rowJson);
+        console.log(rows);
+    });
+})
+
+app.post('/spots/:id/set-open-state', function(req, res) {
+    const isOpenToNumber = req.body.isOpen === true ? 1: 0
+    pool.query(`UPDATE Spot SET Open = ${isOpenToNumber} WHERE SpotId = ${parseInt(req.params.id)}`, (error, rows) => {
+        if (error) throw error;
+    
+        res.json({id: req.id, isOpen: req.body.isOpen});
         console.log(rows);
     });
 })
