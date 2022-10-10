@@ -20,7 +20,7 @@ app.get('/spots', function(req, res) {
         if (error) throw error;
         
         const rowJson = rows.map(spot => {
-            return {id: spot.SpotId, isOpen: spot.Open}
+            return {id: spot.SpotId, isOpen: !!spot.Open}
         });
         res.json(rowJson);
         console.log(rows);
