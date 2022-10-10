@@ -11,6 +11,8 @@ const connection = mysql.createConnection({
     database: process.env.DATABASE_NAME
 });
 
+connection.connect()
+
 app.get('/', function(req, res) {
     res.send('Hello world')
 })
