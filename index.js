@@ -4,21 +4,20 @@ const mysql = require('mysql');
 
 const port = process.env.PORT || 3000;
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+    connectionLimit: 10,
     host: process.env.DATABASE_HOST,
     user: process.env.USERNAME,
     password: process.env.PASSWORD,
     database: process.env.DATABASE_NAME
 });
 
-connection.connect()
-
 app.get('/', function(req, res) {
     res.send('Hello world')
 })
 
 app.get('/spots', function(req, res) {
-    connection.query('SELECT * FROM Spot', (error, rows) => {
+    pool.query('SELECT * FROM Spot', (error, rows) => {
         if (error) throw error;
         
         const rowJson = rows.map(spot => {
