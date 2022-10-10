@@ -30,7 +30,7 @@ app.get('/spots', function(req, res) {
     });
 })
 
-app.post('/spots/:id/set-open-state', function(req, res) {
+app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
     pool.query(`UPDATE Spot SET Open = ${isOpenToNumber} WHERE SpotId = ${parseInt(req.params.id)}`, (error, rows) => {
         if (error) throw error;
