@@ -18,6 +18,7 @@ app.get('/', function(req, res) {
     res.send('Welcome to the Arbor Parker server')
 })
 
+// Gets all spots and their availabilities, returns a list of spots in form {id: someId, isOpen, whether or not spot is open}
 app.get('/spots', function(req, res) {
     pool.query('SELECT * FROM Spot', (error, rows) => {
         if (error) throw error
@@ -30,6 +31,7 @@ app.get('/spots', function(req, res) {
     });
 })
 
+// Sets a spot as open or not open, takes input in form {isOpen: true/false}, returns in form {id: id of changed spot, isOpen: new isOpen value}
 app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
     pool.query("UPDATE Spot SET Open = ? WHERE SpotId = ?", [isOpenToNumber, parseInt(req.params.id)], (error, rows) => {
@@ -41,6 +43,7 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
+// Gets information about a user given their id, returns in form {id: someId, username: someUsername, password: somePassword}
 app.get('/user/:id/', function(req, res) {
     pool.query("SELECT * FROM User WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) throw error
@@ -53,11 +56,12 @@ app.get('/user/:id/', function(req, res) {
     });
 })
 
+// Add a new user given input {username: someString, password: someString}, returns the id of the newly generated user in form {id: someId}
 app.post('/user/add-new-user', function(req, res) {
     pool.query("INSERT INTO User (Username, Password) VALUES (?, ?)", [req.body.username, req.body.password], (error, rows) => {
         if (error) throw error
         
-        let insertedUser = {id: rows.insertId, username: req.body.username, password: req.body.password}
+        let insertedUser = {id: rows.insertId}
         res.json(insertedUser)
     })
 })
@@ -65,4 +69,3 @@ app.post('/user/add-new-user', function(req, res) {
 
 app.listen(port);
 console.log(`Server is listening on port: ${port}`)
-
