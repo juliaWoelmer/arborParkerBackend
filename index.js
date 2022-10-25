@@ -41,7 +41,7 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
-app.post('/user/create-new-user', function(req, res) {
+app.post('/user', function(req, res) {
     pool.query(`INSERT INTO User (Username, Password) VALUES (${req.body.username}, ${req.body.password})`, (error, rows) => {
         if (error) throw error
         
