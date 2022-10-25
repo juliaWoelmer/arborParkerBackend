@@ -52,7 +52,7 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 // })
 
 app.get('/user/:id/', function(req, res) {
-    pool.query(`SELECT * FROM Spot WHERE UserId = ${parseInt(req.params.id)}`, (error, rows) => {
+    pool.query(`SELECT * FROM User WHERE UserId = ${parseInt(req.params.id)}`, (error, rows) => {
         if (error) throw error
         
         const rowJson = rows.map(user => {
