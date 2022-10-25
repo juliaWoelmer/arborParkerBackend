@@ -41,16 +41,28 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
-app.post('/user', function(req, res) {
-    pool.query(`INSERT INTO User (Username, Password) VALUES (${req.body.username.toString()}, ${req.body.password.toString()})`, (error, rows) => {
+// app.post('/user', function(req, res) {
+//     pool.query(`INSERT INTO User (Username, Password) VALUES (${req.body.username}, ${req.body.password})`, (error, rows) => {
+//         if (error) throw error
+        
+//         const insertedUser = {username: req.body.username, password: req.body.password}
+//         res.json(insertedUser)
+//         console.log(insertedUser)
+//     })
+// })
+
+app.get('/user/:id/', function(req, res) {
+    pool.query(`SELECT * FROM Spot WHERE UserId = ${parseInt(req.params.id)}`, (error, rows) => {
         if (error) throw error
         
-        const insertedUser = {username: req.body.username, password: req.body.password}
-        res.json(insertedUser)
-        console.log(insertedUser)
-    })
-    
+        const rowJson = rows.map(user => {
+            return {id: user.UserId, username: user.Username, password: user.Password}
+        });
+        res.json(rowJson)
+        console.log(rows)
+    });
 })
+
 
 app.listen(port);
 console.log(`Server is listening on port: ${port}`)
