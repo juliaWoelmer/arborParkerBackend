@@ -54,10 +54,10 @@ app.get('/user/:id/', function(req, res) {
 })
 
 app.post('/user/add-new-user', function(req, res) {
-    pool.query("INSERT INTO User (Username, Password) VALUES (?, ?) RETURNING UserId", [req.body.username, req.body.password], (error, rows) => {
+    pool.query("INSERT INTO User (Username, Password) VALUES (?, ?)", [req.body.username, req.body.password], (error, rows) => {
         if (error) throw error
         
-        let insertedUser = {username: req.body.username, password: req.body.password}
+        let insertedUser = {id: rows.insertId, username: req.body.username, password: req.body.password}
         res.json(insertedUser)
     })
 })
