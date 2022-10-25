@@ -42,13 +42,14 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 })
 
 app.post('/user/create-new-user', function(req, res) {
-    pool.query(`INSERT INTO User (Username, Password) VALUES (${req.params.username}, ${req.params.password})`, (error, rows) => {
+    pool.query(`INSERT INTO User (Username, Password) VALUES (${req.body.username}, ${req.body.password})`, (error, rows) => {
         if (error) throw error
         
-        const insertedUser = {username: req.params.username, password: req.params.password}
+        const insertedUser = {username: req.body.username, password: req.body.password}
         res.json(insertedUser)
         console.log(insertedUser)
     })
+    
 })
 
 app.listen(port);
