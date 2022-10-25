@@ -41,16 +41,6 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
-// app.post('/user', function(req, res) {
-//     pool.query(`INSERT INTO User (Username, Password) VALUES (${req.body.username}, ${req.body.password})`, (error, rows) => {
-//         if (error) throw error
-        
-//         const insertedUser = {username: req.body.username, password: req.body.password}
-//         res.json(insertedUser)
-//         console.log(insertedUser)
-//     })
-// })
-
 app.get('/user/:id/', function(req, res) {
     pool.query(`SELECT * FROM User WHERE UserId = ${parseInt(req.params.id)}`, (error, rows) => {
         if (error) throw error
@@ -61,6 +51,16 @@ app.get('/user/:id/', function(req, res) {
         res.json(rowJson)
         console.log(rows)
     });
+})
+
+app.post('/user/add-new-user', function(req, res) {
+    pool.query("INSERT INTO User (Username, Password) VALUES (?)", [req.body.username, req.body.password], (error, rows) => {
+        if (error) throw error
+        
+        const insertedUser = {username: req.body.username, password: req.body.password}
+        res.json(insertedUser)
+        console.log(insertedUser)
+    })
 })
 
 
