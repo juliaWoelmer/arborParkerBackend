@@ -32,7 +32,7 @@ app.get('/spots', function(req, res) {
 
 app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
-    pool.query(`UPDATE Spot SET Open = ${isOpenToNumber} WHERE SpotId = ${parseInt(req.params.id)}`, (error, rows) => {
+    pool.query("UPDATE Spot SET Open = ? WHERE SpotId = ?", [isOpenToNumber, parseInt(req.params.id)], (error, rows) => {
         if (error) throw error
         
         const updatedSpot = {id: req.id, isOpen: req.body.isOpen}
@@ -42,7 +42,7 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 })
 
 app.get('/user/:id/', function(req, res) {
-    pool.query(`SELECT * FROM User WHERE UserId = ${parseInt(req.params.id)}`, (error, rows) => {
+    pool.query("SELECT * FROM User WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) throw error
         
         const rowJson = rows.map(user => {
