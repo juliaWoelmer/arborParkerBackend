@@ -53,7 +53,7 @@ app.get('/user/:id/', function(req, res) {
     });
 })
 
-app.post('/user/add-new-user', function(req, res) {
+app.get('/user/add-new-user', function(req, res) {
     pool.query("INSERT INTO User (Username, Password) VALUES (?)", [req.body.username, req.body.password], (error, rows) => {
         if (error) throw error
         
