@@ -41,6 +41,16 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
+app.post('/user/create-new-user', function(req, res) {
+    pool.query(`INSERT INTO User (Username, Password) VALUES (${req.params.username}, ${req.params.password})`, (error, rows) => {
+        if (error) throw error
+        
+        const insertedUser = {username: req.params.username, password: req.params.password}
+        res.json(insertedUser)
+        console.log(insertedUser)
+    })
+})
+
 app.listen(port);
 console.log(`Server is listening on port: ${port}`)
 
