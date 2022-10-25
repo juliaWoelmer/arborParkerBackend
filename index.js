@@ -61,7 +61,7 @@ app.post('/user/add-new-user', function(req, res) {
         pool.query("SELECT LAST_INSERT_ID()", (errorId, rowsId) => {
             if (errorId) throw error
             
-            insertedUser["id"] = rowsId
+            insertedUser["id"] = rowsId["LAST_INSERT_ID()"];
             res.json(insertedUser)
         })
     })
