@@ -130,7 +130,7 @@ app.post('/user/add-new-user', function(req, res) {
 //     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
 // }
-// returns same value as input
+// returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/user/edit-user/:id', function(req, res) {
     pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, AllowStairs = ?, ColorTheme = ? WHERE UserId = ?",
         [
@@ -144,8 +144,8 @@ app.put('/user/edit-user/:id', function(req, res) {
             parseInt(req.params.id)
         ], (error, rows) => {
         if (error) throw error
-    
-        res.json(rows)
+        let affectedRows = {affectedRows: rows.affectedRows}
+        res.json(affectedRows)
     })
 })
 
