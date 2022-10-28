@@ -43,7 +43,18 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
-// Returns all users with given id, returns in form {id: someId, username: someUsername, password: somePassword}
+// Returns all users with given id
+// returns in form 
+// {
+//     id: someId, 
+//     username: someUsername, 
+//     password: somePassword, 
+//     firstName: someFirstName, 
+//     lastName: someLastName, 
+//     email: someEmail, 
+//     allowStairs: 0 or 1, 
+//     colorTheme: someTheme
+// }
 app.get('/user/:id/', function(req, res) {
     pool.query("SELECT * FROM User WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) throw error
@@ -66,7 +77,17 @@ app.get('/user/:id/', function(req, res) {
 })
 
 // Returns all users with given username, 
-// returns in form {id: someId, username: someUsername, password: somePassword}
+// returns in form 
+// {
+//     id: someId, 
+//     username: someUsername, 
+//     password: somePassword, 
+//     firstName: someFirstName, 
+//     lastName: someLastName, 
+//     email: someEmail, 
+//     allowStairs: 0 or 1, 
+//     colorTheme: someTheme
+// }
 app.get('/user/by-username/:username', function(req, res) {
     pool.query("SELECT * FROM User WHERE Username = ?", [req.params.username.toString()], (error, rows) => {
         if (error) throw error
@@ -97,6 +118,38 @@ app.post('/user/add-new-user', function(req, res) {
         res.json(insertedUser)
     })
 })
+
+// Edits an existing user given input in form
+// {
+//     id: someId, 
+//     username: someUsername, 
+//     password: somePassword, 
+//     firstName: someFirstName, 
+//     lastName: someLastName, 
+//     email: someEmail, 
+//     allowStairs: 0 or 1, 
+//     colorTheme: someTheme
+// }
+// returns same value as input
+app.put('/user/edit-user/:id', function(req, res) {
+    pool.query("UPDATE User SET Username = ? Password = ? FirstName = ? LastName = ? Email = ? AllowStairs = ? ColorTheme = ? WHERE UserId = ?",
+        [
+            req.body.username, 
+            req.body.password, 
+            req.body.firstName, 
+            req.body.lastName, 
+            req.body.email, 
+            parseInt(req.body.allowStairs), 
+            req.body.colorTheme,
+            parseInt(req.params.id)
+        ], (error, rows) => {
+        if (error) throw error
+    
+        res.json(rows)
+    })
+})
+
+
 
 
 app.listen(port);
