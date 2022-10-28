@@ -132,7 +132,7 @@ app.post('/user/add-new-user', function(req, res) {
 // }
 // returns same value as input
 app.put('/user/edit-user/:id', function(req, res) {
-    pool.query("UPDATE User SET Username = ? Password = ? FirstName = ? LastName = ? Email = ? AllowStairs = ? ColorTheme = ? WHERE UserId = ?",
+    pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, AllowStairs = ?, ColorTheme = ? WHERE UserId = ?",
         [
             req.body.username, 
             req.body.password, 
