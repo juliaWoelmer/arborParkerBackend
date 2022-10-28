@@ -43,13 +43,22 @@ app.put('/spots/:id/set-open-state', function(req, res) {
     })
 })
 
-// Gets information about a user given id, returns in form {id: someId, username: someUsername, password: somePassword}
+// Returns all users with given id, returns in form {id: someId, username: someUsername, password: somePassword}
 app.get('/user/:id/', function(req, res) {
     pool.query("SELECT * FROM User WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) throw error
         
         const rowJson = rows.map(user => {
-            return {id: user.UserId, username: user.Username, password: user.Password}
+            return {
+                id: user.UserId, 
+                username: user.Username, 
+                password: user.Password,
+                firstName: user.FirstName,
+                lastName: user.LastName,
+                email: user.Email,
+                allowStairs: user.AllowStairs,
+                colorTheme: user.ColorTheme
+            }
         });
         res.json(rowJson)
         console.log(rows)
