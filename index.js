@@ -72,7 +72,16 @@ app.get('/user/by-username/:username', function(req, res) {
         if (error) throw error
         
         const rowJson = rows.map(user => {
-            return {id: user.UserId, username: user.Username, password: user.Password}
+            return {
+                id: user.UserId, 
+                username: user.Username, 
+                password: user.Password,
+                firstName: user.FirstName,
+                lastName: user.LastName,
+                email: user.Email,
+                allowStairs: user.AllowStairs,
+                colorTheme: user.ColorTheme
+            }
         });
         res.json(rowJson)
         console.log(rows)
