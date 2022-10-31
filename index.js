@@ -114,10 +114,10 @@ app.post('/user/add-new-user', function(req, res) {
     pool.query("INSERT INTO User (Username, Password) VALUES (?, ?)", [req.body.username, req.body.password], (error, rows) => {
         if (error) {
             res.json(error)
+        } else {
+            let insertedUser = {id: rows.insertId}
+            res.json(insertedUser)
         }
-        
-        let insertedUser = {id: rows.insertId}
-        res.json(insertedUser)
     })
 })
 
