@@ -118,6 +118,15 @@ app.get('/user/by-username/:username', function(req, res) {
 })
 
 // Add a new user given input {username: someString, password: someString}, returns the id of the newly generated user in form {id: someId}
+// If the user add fails due to a duplicate username detected than an error will be returned that looks like below:
+// {
+//     "code": "ER_DUP_ENTRY",
+//     "errno": 1062,
+//     "sqlMessage": "Duplicate entry someUsername for key 'Username'",
+//     "sqlState": "23000",
+//     "index": 0,
+//     "sql": "INSERT INTO User (Username, Password) VALUES (someUsername, somePassword)"
+// }
 app.post('/user/add-new-user', function(req, res) {
     pool.query("INSERT INTO User (Username, Password) VALUES (?, ?)", [req.body.username, req.body.password], (error, rows) => {
         if (error) {
