@@ -112,7 +112,9 @@ app.get('/user/by-username/:username', function(req, res) {
 // Add a new user given input {username: someString, password: someString}, returns the id of the newly generated user in form {id: someId}
 app.post('/user/add-new-user', function(req, res) {
     pool.query("INSERT INTO User (Username, Password) VALUES (?, ?)", [req.body.username, req.body.password], (error, rows) => {
-        if (error) throw error
+        if (error) {
+            res.json(error)
+        }
         
         let insertedUser = {id: rows.insertId}
         res.json(insertedUser)
