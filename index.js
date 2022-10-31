@@ -49,7 +49,7 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 
 // Returns all users with given id
 // returns in form 
-// {
+// [{
 //     id: someId, 
 //     username: someUsername, 
 //     password: somePassword, 
@@ -58,7 +58,8 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 //     email: someEmail, 
 //     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
-// }
+// }]
+// or [] if there are not users with given id
 app.get('/user/:id/', function(req, res) {
     pool.query("SELECT * FROM User WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) {
@@ -84,7 +85,7 @@ app.get('/user/:id/', function(req, res) {
 
 // Returns all users with given username, 
 // returns in form 
-// {
+// [{
 //     id: someId, 
 //     username: someUsername, 
 //     password: somePassword, 
@@ -93,7 +94,8 @@ app.get('/user/:id/', function(req, res) {
 //     email: someEmail, 
 //     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
-// }
+// }]
+// or [] if there are not users with given username
 app.get('/user/by-username/:username', function(req, res) {
     pool.query("SELECT * FROM User WHERE Username = ?", [req.params.username.toString()], (error, rows) => {
         if (error) {
