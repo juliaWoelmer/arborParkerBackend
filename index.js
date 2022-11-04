@@ -198,5 +198,28 @@ app.put('/user/edit-user-profile/:id', function(req, res) {
     })
 })
 
+// Edits an existing user given input in form
+// {
+//     id: someId,  
+//     allowStairs: 0 or 1, 
+//     colorTheme: someTheme
+// }
+// returns number of affected rows in form {affectedRows: numAffectedRows}
+app.put('/user/edit-user-preferences/:id', function(req, res) {
+    pool.query("UPDATE User SET AllowStairs = ?, ColorTheme = ? WHERE UserId = ?",
+        [
+            parseInt(req.body.allowStairs), 
+            req.body.colorTheme,
+            parseInt(req.params.id)
+        ], (error, rows) => {
+        if (error) {
+            res.json(error)
+        } else {
+            let affectedRows = {affectedRows: rows.affectedRows}
+            res.json(affectedRows)
+        }
+    })
+})
+
 app.listen(port);
 console.log(`Server is listening on port: ${port}`)
