@@ -173,5 +173,30 @@ app.put('/user/edit-user/:id', function(req, res) {
     })
 })
 
+// Edits an existing user given input in form
+// {
+//     id: someId, 
+//     firstName: someFirstName, 
+//     lastName: someLastName, 
+//     email: someEmail, 
+// }
+// returns number of affected rows in form {affectedRows: numAffectedRows}
+app.put('/user/edit-user-profile/:id', function(req, res) {
+    pool.query("UPDATE User SET FirstName = ?, LastName = ?, Email = ? WHERE UserId = ?",
+        [ 
+            req.body.firstName, 
+            req.body.lastName, 
+            req.body.email, 
+            parseInt(req.params.id)
+        ], (error, rows) => {
+        if (error) {
+            res.json(error)
+        } else {
+            let affectedRows = {affectedRows: rows.affectedRows}
+            res.json(affectedRows)
+        }
+    })
+})
+
 app.listen(port);
 console.log(`Server is listening on port: ${port}`)
