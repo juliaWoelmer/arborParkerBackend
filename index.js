@@ -33,8 +33,26 @@ app.get('/spots', function(req, res) {
     });
 })
 
+// Returns a list of spotIds occupied by said user (should not be more than one)
+// If the user is not occupying any spots then returns an empty list []
+// Else returns in form [{spotId: someSpotId}]
+app.get('/spots/occupied-by/:id', function(req, res) {
+    const isOpenToNumber = req.body.isOpen === true ? 1: 0
+    pool.query("SELECT SpotId FROM Spot WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
+        if (error) {
+            res.json(error)
+        } else {
+            const rowJson = rows.map(spot => {
+                return {spotId: spot.SpotId}
+            });
+            res.json(rowJson)
+            console.log(rows)
+        }
+    })
+})
+
 // Sets a spot as open or not open
-// Takes input in form {id: id of changed spot, isOpen: new isOpen value, userId: userId of user in spot if applicable}
+// Takes input in form {isOpen: new isOpen value, userId: userId of user in spot if setting isOpen to false, otherwise is null}
 // Returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
