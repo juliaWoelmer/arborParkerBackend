@@ -33,16 +33,17 @@ app.get('/spots', function(req, res) {
     });
 })
 
-// Sets a spot as open or not open, takes input in form {isOpen: true/false}, returns in form {id: id of changed spot, isOpen: new isOpen value}
+// Sets a spot as open or not open
+// Takes input in form {id: id of changed spot, isOpen: new isOpen value, userId: userId of user in spot if applicable}
+// Returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
-    pool.query("UPDATE Spot SET Open = ? WHERE SpotId = ?", [isOpenToNumber, parseInt(req.params.id)], (error, rows) => {
+    pool.query("UPDATE Spot SET Open = ?, UserId = ? WHERE SpotId = ?", [isOpenToNumber, req.body.userId, parseInt(req.params.id)], (error, rows) => {
         if (error) {
             res.json(error)
         } else {
-            const updatedSpot = {id: req.id, isOpen: req.body.isOpen}
-            res.json(updatedSpot)
-            console.log(updatedSpot)
+            let affectedRows = {affectedRows: rows.affectedRows}
+            res.json(affectedRows)
         }
     })
 })
