@@ -18,14 +18,19 @@ app.get('/', function(req, res) {
     res.send('Welcome to the Arbor Parker server')
 })
 
-// Gets all spots and their availabilities, returns a list of spots in form {id: someId, isOpen, whether or not spot is open}
+// Gets all spots and their availabilities, returns a list of spots in form 
+// {
+//     id: someId, 
+//     isOpen: whether or not spot is open,
+//     timeLastOccupied: timeLastOccupied for user, null if a blockage or spot is open
+// }
 app.get('/spots', function(req, res) {
     pool.query('SELECT * FROM Spot', (error, rows) => {
         if (error) {
             res.json(error)
         } else {
             const rowJson = rows.map(spot => {
-                return {id: spot.SpotId, isOpen: !!spot.Open}
+                return {id: spot.SpotId, isOpen: !!spot.Open, timeLastOccupied: spot.TimeLastOccupied}
             });
             res.json(rowJson)
             console.log(rows)
@@ -52,11 +57,15 @@ app.get('/spots/occupied-by/:id', function(req, res) {
 })
 
 // Sets a spot as open or not open
-// Takes input in form {isOpen: new isOpen value, userId: userId of user in spot if setting isOpen to false, otherwise is null}
+// Takes input in form {
+//     isOpen: new isOpen value, 
+//     userId: userId of user in spot if setting isOpen to false, otherwise is null
+//     timeLastOccupied: timeLastOccupied for user, null if a blockage or if spot is open
+// }
 // Returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/spots/:id/set-open-state', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
-    pool.query("UPDATE Spot SET Open = ?, UserId = ? WHERE SpotId = ?", [isOpenToNumber, req.body.userId, parseInt(req.params.id)], (error, rows) => {
+    pool.query("UPDATE Spot SET Open = ?, UserId = ?, TimeLastOccupied = ? WHERE SpotId = ?", [isOpenToNumber, req.body.userId, req.body.timeLastOccupied, parseInt(req.params.id)], (error, rows) => {
         if (error) {
             res.json(error)
         } else {
