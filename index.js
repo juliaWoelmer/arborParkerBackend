@@ -84,7 +84,6 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
 //     email: someEmail, 
-//     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
 // }]
 // or [] if there are not users with given id
@@ -101,7 +100,6 @@ app.get('/user/:id/', function(req, res) {
                     firstName: user.FirstName,
                     lastName: user.LastName,
                     email: user.Email,
-                    allowStairs: user.AllowStairs,
                     colorTheme: user.ColorTheme
                 }
             });
@@ -120,7 +118,6 @@ app.get('/user/:id/', function(req, res) {
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
 //     email: someEmail, 
-//     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
 // }]
 // or [] if there are not users with given username
@@ -137,7 +134,6 @@ app.get('/user/by-username/:username', function(req, res) {
                     firstName: user.FirstName,
                     lastName: user.LastName,
                     email: user.Email,
-                    allowStairs: user.AllowStairs,
                     colorTheme: user.ColorTheme
                 }
             });
@@ -175,20 +171,18 @@ app.post('/user/add-new-user', function(req, res) {
 //     password: somePassword, 
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
-//     email: someEmail, 
-//     allowStairs: 0 or 1, 
+//     email: someEmail,  
 //     colorTheme: someTheme
 // }
 // returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/user/edit-user/:id', function(req, res) {
-    pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, AllowStairs = ?, ColorTheme = ? WHERE UserId = ?",
+    pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, ColorTheme = ? WHERE UserId = ?",
         [
             req.body.username, 
             req.body.password, 
             req.body.firstName, 
             req.body.lastName, 
-            req.body.email, 
-            parseInt(req.body.allowStairs), 
+            req.body.email,  
             req.body.colorTheme,
             parseInt(req.params.id)
         ], (error, rows) => {
@@ -229,14 +223,12 @@ app.put('/user/edit-user-profile/:id', function(req, res) {
 // Edits an existing user given input in form
 // {
 //     id: someId,  
-//     allowStairs: 0 or 1, 
 //     colorTheme: someTheme
 // }
 // returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/user/edit-user-preferences/:id', function(req, res) {
-    pool.query("UPDATE User SET AllowStairs = ?, ColorTheme = ? WHERE UserId = ?",
+    pool.query("UPDATE User SET ColorTheme = ? WHERE UserId = ?",
         [
-            parseInt(req.body.allowStairs), 
             req.body.colorTheme,
             parseInt(req.params.id)
         ], (error, rows) => {
