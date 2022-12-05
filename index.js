@@ -22,7 +22,8 @@ app.get('/', function(req, res) {
 // {
 //     id: someId, 
 //     isOpen: whether or not spot is open,
-//     timeLastOccupied: timeLastOccupied for user, null if a blockage or spot is open
+//     timeLastOccupied: timeLastOccupied for user, null if a blockage or spot is open,
+//     vanAccessible: whether or not spot is van accessible
 // }
 app.get('/spots', function(req, res) {
     pool.query('SELECT * FROM Spot', (error, rows) => {
@@ -30,7 +31,12 @@ app.get('/spots', function(req, res) {
             res.json(error)
         } else {
             const rowJson = rows.map(spot => {
-                return {id: spot.SpotId, isOpen: !!spot.Open, timeLastOccupied: spot.TimeLastOccupied}
+                return {
+                    id: spot.SpotId, 
+                    isOpen: !!spot.Open, 
+                    timeLastOccupied: spot.TimeLastOccupied, 
+                    vanAccessible: !!spot.VanAccessible
+                }
             });
             res.json(rowJson)
             console.log(rows)
