@@ -49,12 +49,15 @@ app.get('/spots', function(req, res) {
 // Else returns in form [{spotId: someSpotId}]
 app.get('/spots/occupied-by/:id', function(req, res) {
     const isOpenToNumber = req.body.isOpen === true ? 1: 0
-    pool.query("SELECT SpotId FROM Spot WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
+    pool.query("SELECT SpotId, VanAccessible FROM Spot WHERE UserId = ?", [parseInt(req.params.id)], (error, rows) => {
         if (error) {
             res.json(error)
         } else {
             const rowJson = rows.map(spot => {
-                return {spotId: spot.SpotId}
+                return {
+                    spotId: spot.SpotId, 
+                    timeLastOccupied: spot.TimeLastOccupied
+                }
             });
             res.json(rowJson)
             console.log(rows)
