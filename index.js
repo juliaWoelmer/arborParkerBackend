@@ -84,7 +84,8 @@ app.put('/spots/:id/set-open-state', function(req, res) {
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
 //     email: someEmail, 
-//     colorTheme: someTheme
+//     colorTheme: someTheme,
+//     vanAccessible: someVanAccessible boolean
 // }]
 // or [] if there are not users with given id
 app.get('/user/:id/', function(req, res) {
@@ -100,7 +101,8 @@ app.get('/user/:id/', function(req, res) {
                     firstName: user.FirstName,
                     lastName: user.LastName,
                     email: user.Email,
-                    colorTheme: user.ColorTheme
+                    colorTheme: user.ColorTheme,
+                    vanAccessible: parseInt(user.vanAccessible) === 1 ? true: false
                 }
             });
             res.json(rowJson)
@@ -118,7 +120,8 @@ app.get('/user/:id/', function(req, res) {
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
 //     email: someEmail, 
-//     colorTheme: someTheme
+//     colorTheme: someTheme,
+//     vanAccessible: someVanAccessible boolean
 // }]
 // or [] if there are not users with given username
 app.get('/user/by-username/:username', function(req, res) {
@@ -134,7 +137,8 @@ app.get('/user/by-username/:username', function(req, res) {
                     firstName: user.FirstName,
                     lastName: user.LastName,
                     email: user.Email,
-                    colorTheme: user.ColorTheme
+                    colorTheme: user.ColorTheme,
+                    vanAccessible: parseInt(user.vanAccessible) === 1 ? true: false
                 }
             });
             res.json(rowJson)
@@ -172,11 +176,13 @@ app.post('/user/add-new-user', function(req, res) {
 //     firstName: someFirstName, 
 //     lastName: someLastName, 
 //     email: someEmail,  
-//     colorTheme: someTheme
+//     colorTheme: someTheme,
+//     vanAccessible: someVanAccessible boolean
 // }
 // returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/user/edit-user/:id', function(req, res) {
-    pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, ColorTheme = ? WHERE UserId = ?",
+    const vanAccessibleValue = req.body.vanAccessible === true ? 1: 0
+    pool.query("UPDATE User SET Username = ?, Password = ?, FirstName = ?, LastName = ?, Email = ?, ColorTheme = ?, VanAccessible = ? WHERE UserId = ?",
         [
             req.body.username, 
             req.body.password, 
@@ -184,6 +190,7 @@ app.put('/user/edit-user/:id', function(req, res) {
             req.body.lastName, 
             req.body.email,  
             req.body.colorTheme,
+            vanAccessibleValue,
             parseInt(req.params.id)
         ], (error, rows) => {
         if (error) {
@@ -223,13 +230,16 @@ app.put('/user/edit-user-profile/:id', function(req, res) {
 // Edits an existing user given input in form
 // {
 //     id: someId,  
-//     colorTheme: someTheme
+//     colorTheme: someTheme,
+//     vanAccessible: someVanAccessible boolean
 // }
 // returns number of affected rows in form {affectedRows: numAffectedRows}
 app.put('/user/edit-user-preferences/:id', function(req, res) {
-    pool.query("UPDATE User SET ColorTheme = ? WHERE UserId = ?",
+    const vanAccessibleValue = req.body.vanAccessible === true ? 1: 0
+    pool.query("UPDATE User SET ColorTheme = ?, VanAccessible = ? WHERE UserId = ?",
         [
             req.body.colorTheme,
+            vanAccessibleValue,
             parseInt(req.params.id)
         ], (error, rows) => {
         if (error) {
