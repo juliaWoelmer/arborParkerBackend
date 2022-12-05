@@ -100,7 +100,6 @@ app.get('/user/:id/', function(req, res) {
             res.json(error)
         } else {
             const rowJson = rows.map(user => {
-                const vanAccessibleValue = user.vanAccessible === 1 ? true: false;
                 return {
                     id: user.UserId, 
                     username: user.Username, 
@@ -109,7 +108,7 @@ app.get('/user/:id/', function(req, res) {
                     lastName: user.LastName,
                     email: user.Email,
                     colorTheme: user.ColorTheme,
-                    vanAccessible: vanAccessibleValue
+                    vanAccessible: !!user.VanAccessible
                 }
             });
             res.json(rowJson)
@@ -137,7 +136,6 @@ app.get('/user/by-username/:username', function(req, res) {
             res.json(error)
         } else {
             const rowJson = rows.map(user => {
-                const vanAccessibleValue = user.vanAccessible === 1 ? true: false;
                 return {
                     id: user.UserId, 
                     username: user.Username, 
@@ -146,7 +144,7 @@ app.get('/user/by-username/:username', function(req, res) {
                     lastName: user.LastName,
                     email: user.Email,
                     colorTheme: user.ColorTheme,
-                    vanAccessible: vanAccessibleValue
+                    vanAccessible: !!user.VanAccessible
                 }
             });
             res.json(rowJson)
